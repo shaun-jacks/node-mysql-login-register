@@ -1,7 +1,9 @@
-const express            = require('express');
-const Joi                = require('joi');
-const bcrypt             = require('bcryptjs');
-const _                  = require('lodash');
+const config  = require('config');
+const jwt     = require('jsonwebtoken');
+const express = require('express');
+const Joi     = require('joi');
+const bcrypt  = require('bcryptjs');
+const _       = require('lodash');
 
 const router = express.Router();  //api/users
 
@@ -20,6 +22,7 @@ let users = [
     password: '12345'
   },
   {
+    id: 3,
     name: "shaun2",
     email: "shaun2@gmail.com",
     // Unhashed: "testing12345@!"
@@ -38,7 +41,7 @@ function validate(req) {
   return Joi.validate(req, schema);
 }
 
-// User Registration
+// User Login
 router.post('/', async (req, res) => { 
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
@@ -50,8 +53,9 @@ router.post('/', async (req, res) => {
   const validPassword = await bcrypt.compare(req.body.password, user.password);
   if (!validPassword) return res.status(400).send('Invalid email or password');
 
+  const token = jwt.sign({ id: user.id }, config.get('jwtPrivateKey'));
 
-  res.send(true);
+  res.send(token);
 
 });
 

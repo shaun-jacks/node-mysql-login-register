@@ -1,3 +1,5 @@
+const config             = require('config');
+const jwt                = require('jsonwebtoken');
 const express            = require('express');
 const Joi                = require('joi');
 const PasswordComplexity = require('joi-password-complexity');
@@ -67,7 +69,8 @@ router.post('/', async (req, res) => {
   const salt    = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(user.password, salt);
 
-  res.send(_.pick(user, ['name', 'email', 'password']));
+  const token = jwt.sign({ id: user.id }, config.get('jwtPrivateKey'));
+  res.header('x-auth-token', token).send(_.pick(user, ['name', 'email', 'password']));
 
 });
 
