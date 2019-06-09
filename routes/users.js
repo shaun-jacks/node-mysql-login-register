@@ -28,6 +28,11 @@ let users = [
     name: 'John',
     email: 'john@gmail.com',
     password: '12345'
+  },
+  {
+    name: "shaun2",
+    email: "shaun2@gmail.com",
+    password: "$2a$10$5ctHrY2CeGu9EcK9ijIOKuNlPF7v42TrH1xbK99LoqdneYRiepKNS"
   }
   
 ]
@@ -62,7 +67,7 @@ router.post('/', async (req, res) => {
   const salt    = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(user.password, salt);
 
-  res.send(_.pick(user, ['name', 'email']));
+  res.send(_.pick(user, ['name', 'email', 'password']));
 
 });
 
