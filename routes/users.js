@@ -34,7 +34,6 @@ router.post('/', async (req, res) => {
   const { error } = validateUser(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  // Replace below line with database search for users
   const userFound =   await db.User.findOne({
     where: {
       email: req.body.email
@@ -54,7 +53,7 @@ router.post('/', async (req, res) => {
   
   user = await user.save();
 
-  const token = jwt.sign({ id: user.id }, config.get('jwtPrivateKey'));
+  const token = user.generateAuthToken();
 
   res.header('x-auth-token', token).send(_.pick(user, ['username', 'email']));
 

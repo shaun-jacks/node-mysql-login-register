@@ -1,3 +1,6 @@
+const config = require('config');
+const jwt    = require('jsonwebtoken');
+
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     email: DataTypes.STRING,
@@ -7,6 +10,11 @@ module.exports = (sequelize, DataTypes) => {
   User.associate = function(models) {
     // associations can be defined here
   };
+
+  User.prototype.generateAuthToken = function() {
+    const token = jwt.sign({ id: this.id }, config.get('jwtPrivateKey'));
+    return token;
+  }
   
   return User;
 };
