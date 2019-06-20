@@ -1,10 +1,15 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import LoginForm from "./components/loginForm";
 
 function App() {
-  return <LoginForm />;
+  return (
+    <React.Fragment>
+      <main className="container">
+        <LoginForm />
+      </main>
+    </React.Fragment>
+  );
 }
 
 export default App;
