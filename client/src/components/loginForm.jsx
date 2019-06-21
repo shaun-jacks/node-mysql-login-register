@@ -1,12 +1,11 @@
 import React, { Component } from "react";
-import Input from "./common/input";
 import Joi from "joi-browser";
 import Form from "./common/form";
+import login from "../services/authService";
 
 class LoginForm extends Form {
   state = {
     data: {
-      username: "",
       email: "",
       password: ""
     },
@@ -14,17 +13,29 @@ class LoginForm extends Form {
   };
 
   schema = {
-    username: Joi.string()
+    email: Joi.string()
       .required()
-      .label("Username"),
+      .email()
+      .label("Email"),
     password: Joi.string()
       .required()
       .label("Password")
   };
 
-  doSubmit = () => {
+  doSubmit = async () => {
     // Call the server
-    console.log("Submitted");
+    try {
+      const { data } = this.state;
+      const { data: jwt } = await login(data.email, data.password);
+      localStorage.setItem("token", jwt);
+      this.props.history("/");
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        const errors = { ...this.state.errors };
+        errors.email = ex.response.data;
+        this.setState({ errors });
+      }
+    }
   };
 
   render() {
@@ -32,10 +43,10 @@ class LoginForm extends Form {
       <div>
         <h1>Login</h1>
         <form onSubmit={this.handleSubmit}>
-          {this.renderInput("username", "Username", "text")}
+          {this.renderInput("email", "Email", "text")}
           {this.renderInput("password", "Password", "password")}
+          {this.renderButton("Login")}
         </form>
-        {this.renderButton("Login")}
       </div>
     );
   }
