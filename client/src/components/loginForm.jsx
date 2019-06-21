@@ -7,6 +7,7 @@ class LoginForm extends Form {
   state = {
     data: {
       username: "",
+      email: "",
       password: ""
     },
     errors: {}
