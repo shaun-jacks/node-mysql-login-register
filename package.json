@@ -5,10 +5,10 @@
   "main": "server.js",
   "scripts": {
     "client-install": "npm install --prefix client",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "export NODE_ENV=test && jest --verbose",
     "server": "node server.js",
     "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "export NODE_ENV=development && concurrently \"npm run server\" \"npm run client\""
   },
   "author": "Shaun Jackson",
   "license": "ISC",
@@ -34,6 +34,7 @@
     "sequelize": "^5.8.7"
   },
   "devDependencies": {
+    "jest": "^24.7.1",
     "nodemon": "^1.19.1"
   }
 }
