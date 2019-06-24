@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "client-install": "npm install --prefix client",
-    "test": "jest --watchAll --verbose",
+    "test": "jest --watchAll --verbose --runInBand",
     "server": "node server.js",
     "client": "npm start --prefix client",
     "dev": "export NODE_ENV=development && concurrently \"npm run server\" \"npm run client\""

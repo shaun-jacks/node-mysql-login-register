@@ -7,8 +7,8 @@ describe("api/users", () => {
   beforeEach(async () => {
     server = await require("../../../server");
   });
-  afterEach(() => {
-    server.close();
+  afterEach(async () => {
+    await server.close();
   });
 
   describe("POST /", () => {
@@ -30,15 +30,15 @@ describe("api/users", () => {
         email: "test@gmail.com",
         password: "Test12345!"
       };
-      const user = await User.create({
-        userBody
-      });
-
+      // Create new user
+      const user = await User.create(userBody);
+      // Create user that already exists
       const res = await request(server)
         .post("/api/users")
         .send(userBody);
-
+      // Respond with Error
       expect(res.status).toBe(400);
+
       try {
         await User.destroy({
           force: true,
