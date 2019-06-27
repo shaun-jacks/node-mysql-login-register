@@ -10,6 +10,7 @@ const nodemailer = require("nodemailer");
 
 const router = express.Router(); //api/users
 
+// Init email config
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -82,16 +83,17 @@ router.post("/reset_password/:email", async (req, res) => {
       where: { email: req.params.email }
     });
   } catch (err) {
-    return res.status(404).send("No user with that email");
+    return res.status(404).send("Error reading from database");
+  }
+  if (!user) {
+    return res.status(404).send("Email never registered.");
   }
   // Generate one-time use URL with jwt token
   const secret = `${user.password}-${user.createdAt}`;
   const token = jwt.sign({ id: user.id }, secret, {
     expiresIn: 3600 // expires in 1 hour
   });
-  const url = `localhost:${process.env.PORT || 5000}/reset_password/${
-    user.id
-  }/${token}`;
+  const url = `localhost/users/reset_password_received/${user.id}/${token}`;
 
   const emailTemplate = {
     subject: "Password Reset Node Auth Application",

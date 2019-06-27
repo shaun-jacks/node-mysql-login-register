@@ -10,3 +10,7 @@ export function register(user) {
     password: user.password
   });
 }
+
+export function resetPassword(email) {
+  return http.post(`${apiEndpoint}/reset_password/${email}`, {});
+}
