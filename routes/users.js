@@ -93,7 +93,8 @@ router.post("/reset_password/:email", async (req, res) => {
   const token = jwt.sign({ id: user.id }, secret, {
     expiresIn: 3600 // expires in 1 hour
   });
-  const url = `localhost/users/reset_password_received/${user.id}/${token}`;
+  const url = `localhost:${process.env.PORT ||
+    3000}/users/reset_password_received/${user.id}/${token}`;
 
   const emailTemplate = {
     subject: "Password Reset Node Auth Application",
