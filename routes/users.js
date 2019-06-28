@@ -19,16 +19,6 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-const complexityOptions = {
-  min: 5,
-  max: 250,
-  lowerCase: 1,
-  upperCase: 1,
-  numeric: 1,
-  symbol: 1,
-  requirementCount: 2
-};
-
 function validateUser(user) {
   const schema = {
     username: Joi.string()
@@ -40,7 +30,7 @@ function validateUser(user) {
       .max(255)
       .email()
       .required(),
-    password: new PasswordComplexity(complexityOptions).required()
+    password: new PasswordComplexity().required()
   };
 
   return Joi.validate(user, schema);
@@ -48,8 +38,11 @@ function validateUser(user) {
 
 // User Registration
 router.post("/", async (req, res) => {
-  const { error } = validateUser(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+  try {
+    await validateUser(req.body);
+  } catch (err) {
+    return res.status(400).send(err.details[0].message);
+  }
 
   const userFound = await db.User.findOne({
     where: {
@@ -126,6 +119,17 @@ router.post("/receive_new_password/:id/:token", async (req, res) => {
   // Get id and token within params, and new password in body
   const { id, token } = req.params;
   const { password } = req.body;
+  // Validate new password
+  try {
+    await Joi.validate(
+      { password },
+      {
+        password: new PasswordComplexity().required()
+      }
+    );
+  } catch (err) {
+    return res.status(400).send(err.details[0].message);
+  }
   // get user from database with id
   let user;
   try {
@@ -133,15 +137,18 @@ router.post("/receive_new_password/:id/:token", async (req, res) => {
       where: { id }
     });
   } catch (err) {
-    return res.status(404).send("No user with that id");
+    return res.status(404).send("Error reading database");
   }
+  if (!user) return res.status(404).send("No user with that id");
   // Generate secret token
   const secret = `${user.password}-${user.createdAt}`;
   // Verify that token is valid
   const payload = jwt.decode(token, secret);
-  console.log(id);
+  if (!payload) {
+    return res.status(404).send("Invalid id or token");
+  }
   if (payload.id != id) {
-    return res.status(404).send("Invalid user");
+    return res.status(404).send("Invalid id or token");
   }
   // Hash new password and store in database
   const salt = await bcrypt.genSalt(10);

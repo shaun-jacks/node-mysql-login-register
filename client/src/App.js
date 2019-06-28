@@ -30,7 +30,12 @@ class App extends Component {
           <Switch>
             <Route
               path="/users/reset_password_received/:userId/:token"
-              render={({ match }) => <PasswordResetReceivedForm />}
+              render={({ match }) => (
+                <PasswordResetReceivedForm
+                  userId={match.params.userId}
+                  token={match.params.token}
+                />
+              )}
             />
             <Route path="/users/reset_password" component={PasswordResetForm} />
             <Route path="/login" component={LoginForm} />

@@ -45,6 +45,16 @@ class RegisterForm extends Form {
     return (
       <div>
         <h1>Register</h1>
+        <br />
+        <p>Password must meet the following requirements:</p>
+        <ul>
+          <li>Min 10 characters</li>
+          <li>Max 30 characters</li>
+          <li>1 lowercase [a-z]</li>
+          <li>1 uppercase [A-Z]</li>
+          <li>1 numeric [0-9]</li>
+          <li>1 symbol</li>
+        </ul>
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("username", "Username", "text")}
           {this.renderInput("email", "Email", "text")}

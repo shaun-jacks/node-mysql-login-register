@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { NavLink } from "react-router-dom";
 import Joi from "joi-browser";
 import Form from "./common/form";
 import login from "../services/authService";
@@ -47,6 +48,12 @@ class LoginForm extends Form {
           {this.renderInput("password", "Password", "password")}
           {this.renderButton("Login")}
         </form>
+        <br />
+        <p>
+          Forgot your password?
+          <br />
+          <NavLink to="users/reset_password">Reset here. </NavLink>
+        </p>
       </div>
     );
   }

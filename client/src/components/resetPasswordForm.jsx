@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { NavLink } from "react-router-dom";
 import Form from "./common/form.jsx";
 import Joi from "joi-browser";
 import * as userService from "../services/userService";
@@ -8,7 +9,8 @@ class PasswordResetForm extends Form {
     data: {
       email: ""
     },
-    errors: {}
+    errors: {},
+    submitted: false
   };
 
   schema = {
@@ -20,6 +22,10 @@ class PasswordResetForm extends Form {
 
   doSubmit = async () => {
     try {
+      this.setState({
+        data: { email: "" },
+        submitted: true
+      });
       const { email } = this.state.data;
       await userService.resetPassword(email);
     } catch (ex) {
@@ -32,13 +38,25 @@ class PasswordResetForm extends Form {
   };
 
   render() {
+    const { submitted } = this.state;
     return (
       <div>
         <h1>Reset Password</h1>
-        <form onSubmit={this.handleSubmit}>
-          {this.renderInput("email", "Email", "text")}
-          {this.renderButton("Submit")}
-        </form>
+        {submitted ? (
+          <div>
+            <p>
+              A reset password link has been sent to your email if it has been
+              registered. This could take a few minutes.
+            </p>
+            <p>Click the link to reset your password.</p>
+            <NavLink to="users/login">Return to Login. </NavLink>
+          </div>
+        ) : (
+          <form onSubmit={this.handleSubmit}>
+            {this.renderInput("email", "Email", "text")}
+            {this.renderButton("Submit")}
+          </form>
+        )}
       </div>
     );
   }

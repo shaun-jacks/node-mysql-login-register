@@ -14,3 +14,8 @@ export function register(user) {
 export function resetPassword(email) {
   return http.post(`${apiEndpoint}/reset_password/${email}`, {});
 }
+export function resetUpdatePassword(id, token, password) {
+  return http.post(`${apiEndpoint}/receive_new_password/${id}/${token}`, {
+    password: password
+  });
+}

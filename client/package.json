@@ -7,6 +7,7 @@
     "bootstrap": "^4.1.1",
     "concurrently": "^4.1.0",
     "joi-browser": "^13.4.0",
+    "joi-password-complexity": "^2.0.1",
     "jwt-decode": "^2.2.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
