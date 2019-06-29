@@ -41,7 +41,10 @@ class App extends Component {
             <Route path="/login" component={LoginForm} />
             <Route path="/logout" component={LogOut} />
             <Route path="/register" component={RegisterForm} />
-            <Route path="/" component={HomePage} />
+            <Route
+              path="/"
+              render={() => <HomePage user={this.state.user} />}
+            />
           </Switch>
         </main>
       </React.Fragment>

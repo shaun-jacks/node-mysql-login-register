@@ -3,8 +3,8 @@ import { NavLink } from "react-router-dom";
 
 const NavBar = ({ user }) => {
   return (
-    <div>
-      <nav className="navbar nav nav-tabs justify-content-end">
+    <div style={{ marginBottom: 10 }}>
+      <nav className="nav nav-masthead justify-content-center">
         <li className="nav-item">
           <NavLink className="nav-link" exact to="/">
             Home

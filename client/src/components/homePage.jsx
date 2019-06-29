@@ -1,9 +1,17 @@
 import React from "react";
 
-const homePage = () => {
+const homePage = ({ user }) => {
   return (
     <div>
-      <h1>Home</h1>
+      <main role="main" class="text-center inner cover">
+        {user ? <h2>Welcome {user.username}!</h2> : <h2>Welcome</h2>}
+        <p class="lead">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore porro
+          sint fugiat debitis qui nesciunt nemo, iusto dolore expedita
+          asperiores ipsum culpa sapiente? Aspernatur qui quibusdam sequi
+          officia sunt quae?
+        </p>
+      </main>
     </div>
   );
 };
