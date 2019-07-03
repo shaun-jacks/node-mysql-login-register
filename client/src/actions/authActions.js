@@ -1,14 +1,12 @@
-import * as userService from "./services/userService";
-import * as authService from "./services/authService";
+import * as userService from "../services/userService";
+import login from "../services/authService";
+import setAuthToken from "../utils/setAuthToken";
+import jwt_decode from "jwt-decode";
 
-import {
-  GET_ERRORS,
-  SET_CURRENT_USER,
-  USER_LOADING
-} from "./types";
+import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING } from "./types";
 
 // Register User
-export const registerUser = (userData, history) => dispatch => {
+export const registerUser = userData => async dispatch => {
   try {
     const response = await userService.register(userData);
     window.location = "/auth/login";
@@ -16,45 +14,43 @@ export const registerUser = (userData, history) => dispatch => {
     dispatch({
       type: GET_ERRORS,
       payload: err.response.data
-    })
+    });
   }
-}
+};
 
 // Login - store user token
-export const loginUser = userData => dispatch => {
-  
+export const loginUser = userData => async dispatch => {
   try {
-    const {data: jwt } = await authService.login(userData.email, userData.password);
+    const { data: jwt } = await login(userData.email, userData.password);
     localStorage.setItem("token", jwt);
     // Set token to Auth header
-    setAuthToken(token);
+    setAuthToken(jwt);
     // Decode for user data
-    const decoded = jwt_decode(token);
+    const decoded = jwt_decode(jwt);
     // Set current user
-    dispatch(setCurrentUser(decoded));  
-
+    dispatch(setCurrentUser(decoded));
   } catch (err) {
     dispatch({
       type: GET_ERRORS,
       payload: err.response.data
-    })
+    });
   }
-}
+};
 
 // Set logged in user
 export const setCurrentUser = decoded => {
   return {
     type: SET_CURRENT_USER,
     payload: decoded
-  }
-}
+  };
+};
 
 // User loading
 export const setUserLoading = () => {
   return {
     type: USER_LOADING
-  }
-}
+  };
+};
 
 // User Logout
 export const logoutUser = () => dispatch => {
