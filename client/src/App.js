@@ -26,7 +26,7 @@ class App extends Component {
     return (
       <React.Fragment>
         <NavBar user={this.state.user} />
-        <main className="container">
+        <main className="container-fluid">
           <Switch>
             <Route
               path="/users/reset_password_received/:userId/:token"

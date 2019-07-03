@@ -49,13 +49,20 @@ class PasswordResetForm extends Form {
               registered. This could take a few minutes.
             </p>
             <p>Click the link to reset your password.</p>
-            <NavLink to="users/login">Return to Login. </NavLink>
+            <NavLink to="/login">Return to Login. </NavLink>
           </div>
         ) : (
-          <form onSubmit={this.handleSubmit}>
-            {this.renderInput("email", "Email", "text")}
-            {this.renderButton("Submit")}
-          </form>
+          <div className="container">
+            <div className="row">
+              <div className="col-6">
+                <form onSubmit={this.handleSubmit}>
+                  {this.renderInput("email", "Email", "text")}
+                  {this.renderButton("Submit")}
+                </form>
+              </div>
+              <div className="col-6" />
+            </div>
+          </div>
         )}
       </div>
     );

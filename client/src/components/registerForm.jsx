@@ -55,6 +55,7 @@ class RegisterForm extends Form {
           <li>1 numeric [0-9]</li>
           <li>1 symbol</li>
         </ul>
+        <div className="container row col-6" />
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("username", "Username", "text")}
           {this.renderInput("email", "Email", "text")}
