@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import Joi from "joi-browser";
 import Form from "./common/form";
-import login from "../services/authService";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { loginUser } from "../actions/authActions";
 
 class LoginForm extends Form {
   state = {
@@ -26,16 +28,16 @@ class LoginForm extends Form {
   doSubmit = async () => {
     // Call the server
     try {
-      const { data } = this.state;
-      const { data: jwt } = await login(data.email, data.password);
-      localStorage.setItem("token", jwt);
-      window.location = "/";
-    } catch (ex) {
-      if (ex.response && ex.response.status === 400) {
-        const errors = { ...this.state.errors };
-        errors.email = ex.response.data;
+      await this.props.loginUser(this.state.data);
+      const errorMsg = this.props.errors;
+      console.log(errorMsg);
+      if (errorMsg) {
+        let errors = {};
+        errors.password = errorMsg;
         this.setState({ errors });
       }
+    } catch (ex) {
+      console.log(ex);
     }
   };
 
@@ -64,4 +66,18 @@ class LoginForm extends Form {
   }
 }
 
-export default LoginForm;
+LoginForm.propTypes = {
+  loginUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.string.isRequired
+};
+
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors
+});
+
+export default connect(
+  mapStateToProps,
+  { loginUser }
+)(LoginForm);

@@ -8,7 +8,7 @@ import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING } from "./types";
 // Register User
 export const registerUser = userData => async dispatch => {
   try {
-    const response = await userService.register(userData);
+    await userService.register(userData);
     window.location = "/auth/login";
   } catch (err) {
     dispatch({
@@ -28,7 +28,8 @@ export const loginUser = userData => async dispatch => {
     // Decode for user data
     const decoded = jwt_decode(jwt);
     // Set current user
-    dispatch(setCurrentUser(decoded));
+    //dispatch(setCurrentUser(decoded));
+    window.location = "/";
   } catch (err) {
     dispatch({
       type: GET_ERRORS,

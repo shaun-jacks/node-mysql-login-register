@@ -4,7 +4,6 @@ import Form from "./common/form";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { registerUser } from "../actions/authActions";
-import * as userService from "../services/userService";
 
 class RegisterForm extends Form {
   state = {
