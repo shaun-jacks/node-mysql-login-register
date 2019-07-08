@@ -1,4 +1,3 @@
-const config = require("config");
 const express = require("express");
 const env = require("dotenv").config();
 const path = require("path");
@@ -7,7 +6,7 @@ const auth = require("./routes/auth");
 const app = express();
 const db = require("./models/index");
 
-if (!config.get("jwtPrivateKey")) {
+if (!process.env.jwtPrivateKey) {
   console.error("FATAL ERROR: jwtPrivateKey is not defined");
   process.exit(1);
 }

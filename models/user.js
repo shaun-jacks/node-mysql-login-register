@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
   User.prototype.generateAuthToken = function() {
     const token = jwt.sign(
       { id: this.id, username: this.username },
-      config.get("jwtPrivateKey")
+      process.env.jwtPrivateKey
     );
     return token;
   };

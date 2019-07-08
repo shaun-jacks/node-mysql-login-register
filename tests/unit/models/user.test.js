@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-const config = require("config");
 const db = require("../../../models/index");
 
 describe("user.generateAuthToken", () => {
@@ -12,7 +11,7 @@ describe("user.generateAuthToken", () => {
     });
     const payload = { id: user.id, username: user.username };
     const token = user.generateAuthToken();
-    const decoded = jwt.verify(token, config.get("jwtPrivateKey"));
+    const decoded = jwt.verify(token, process.env.jwtPrivateKey);
     expect(decoded).toMatchObject(payload);
     await user.destroy({ force: true });
   });
